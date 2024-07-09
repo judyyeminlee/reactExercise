@@ -1,29 +1,51 @@
 import "./HomePage.css";
+import { useState } from "react";
 
-function HomePage() {
+export function HomePage() {
+  //This will be used for the input field's text value
+  const [movies, setMovies] = useState([]);
+  //An array that holds all the different movie titles
+  const [newMovie, setNewMovie] = useState("");
+
+  const handleInputChange = (e) => {
+    setNewMovie(e.target.value);
+  };
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    setMovies([...movies, newMovie]);
+    setText("");
+  };
+
+  const handleRemoveMovie = (index) => {
+    setMovies(
+      movies.filter((_, i) => {
+        i !== index;
+      })
+    );
+  };
+
   return (
-    <div>
-      <h1>Movie Watchlist</h1>
-      <form>
-        <label htmlFor="movieInput">Add a Movie</label>
-        <input type="text" id="movieInput" name="movieInput" />
-        <button type="submit">Add Movie</button>
+    <>
+      <h1>Movies</h1>
+      <form onSubmit={handleFormSubmit}>
+        <label htmlFor="movieInput">Enter Movie</label>
+        <input
+          type="text"
+          id="movieInput"
+          name="movieInput"
+          onChange={handleInputChange}
+        />
+        <button type="submit">Add movie</button>
+        <ul>
+          {movies.map((movie, index) => (
+            <li key={index}>
+              {movie}
+              <button onClick={() => handleRemoveMovie(index)}>Remove</button>
+            </li>
+          ))}
+        </ul>
       </form>
-      <ul id="watchlist">
-        <li>
-          <p>Lord of the Rings</p>
-        </li>
-        <li>
-          <p>Harry Potter</p>
-        </li>
-        <li>
-          <p>Star Trek</p>
-        </li>
-        <li>
-          <p>Dune</p>
-        </li>
-      </ul>
-    </div>
+    </>
   );
 }
 
